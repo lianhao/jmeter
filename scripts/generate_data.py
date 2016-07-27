@@ -170,33 +170,35 @@ def get_parser():
         dest='batch_count',
         type=int,
         default=1,
-        help='number of samples aggregated in the notification payload',
+        help='Number of samples aggregated in a single notification payload, '
+             'default is 1.',
     )
     parser.add_argument(
         '--interval',
         default=1,
         type=int,
-        help='The period between samples, in seconds.',
+        help='The period between samples, in seconds, default is 1 seconds',
     )
     parser.add_argument(
         '--start',
         default=31,
         help='Number of days to be stepped back from now or date in the past ('
-             '"YYYY-MM-DDTHH:MM:SS" format) to define timestamps start range.',
+             '"YYYY-MM-DDTHH:MM:SS" format) to define timestamps start range, '
+             'default is 31 days.',
     )
     parser.add_argument(
         '--end',
         default=2,
         help='Number of days to be stepped forward from now or date in the '
              'future ("YYYY-MM-DDTHH:MM:SS" format) to define timestamps end '
-             'range.',
+             'range, default is 2 days.',
     )
     parser.add_argument(
         '--meter-type',
         choices=sample.TYPES,
         default=sample.TYPE_GAUGE,
         dest='meter_type',
-        help='Counter type.',
+        help='Counter type, default is gauge',
     )
     parser.add_argument(
         '--unit',
@@ -215,13 +217,15 @@ def get_parser():
     )
     parser.add_argument(
         '--random_min',
-        help='The random min border of amount for added to given volume.',
+        help='The random min border of amount for added to given volume.'
+             '-1 means no randomization, default is -1.',
         type=float,
         default=-1,
     )
     parser.add_argument(
         '--random_max',
-        help='The random max border of amount for added to given volume.',
+        help='The random max border of amount for added to given volume.'
+             '-1 means no randomization, default is -1.',
         type=float,
         default=-1,
     )
@@ -229,17 +233,19 @@ def get_parser():
         '--resources-count',
         dest='resources_count',
         default=1,
-        help='The number of different resources.',
+        type=int,
+        help='The number of different resources. The script will generate '
+             'meters with different random resource_id(s), default is 1.',
     )
     parser.add_argument(
         '--name',
         default='test_meter',
         dest='name',
-        help='The counter name for the meter data.',
+        help='The counter name for the meter data, default is test_meter.',
     )
     parser.add_argument(
         '--volume',
-        help='The amount to attach to the meter.',
+        help='The value of the meter, default is 1.0.',
         type=float,
         default=1.0,
     )
@@ -280,6 +286,7 @@ def main():
     with open(args.file, 'w') as f:
         csv_file = f
         FUNC_MAP[args.type](args.batch_count, args)
+        print('Use jmeter to load the test data from %s' % args.file)
     return 0
 
 
